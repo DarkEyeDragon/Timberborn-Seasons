@@ -1,5 +1,6 @@
 ﻿using System;
 using FloodSeason.Seasons;
+using FloodSeason.Utils;
 using FloodSeason.Weather;
 using Timberborn.CoreUI;
 using Timberborn.GameUI;
@@ -56,7 +57,8 @@ public class SeasonDatePanel : ILoadableSingleton, IUpdatableSingleton
     private void UpdatePanel()
     {
         //_root.EnableInClassList(DroughtClass, _droughtService.IsDrought);
-        _text.text = $"{_seasonService.CurrentSeason.Name} ({_seasonCycleTrackerService.Day}/{_seasonCycleTrackerService.Month}/{_seasonCycleTrackerService.Year})";
-        _tooltipText = $"{_seasonService.CurrentSeason.Name} (day/month/year)";
+        var month = MonthParser.ToTranslationKey(_seasonCycleTrackerService.Month);
+        _text.text = $"{_seasonService.CurrentSeason.Name} ({_seasonCycleTrackerService.Day:D2}/{_loc.T(month)[..3]}/{_seasonCycleTrackerService.Year:D4})";
+        _tooltipText = $"{_loc.T("seasons.day")}/{_loc.T("seasons.month")}/{_loc.T("seasons.year")}";
     }
 }

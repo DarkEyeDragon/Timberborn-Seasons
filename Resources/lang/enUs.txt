@@ -1,2 +1,17 @@
 ID,Text,Comment
 seasons.growable.paused,It's freezing and will die in {0} days.
+seasons.day,day
+seasons.month,month
+seasons.year,year
+seasons.month.1,January
+seasons.month.2,February
+seasons.month.3,March
+seasons.month.4,April
+seasons.month.5,May
+seasons.month.6,June
+seasons.month.7,July
+seasons.month.8,August
+seasons.month.9,September
+seasons.month.10,October
+seasons.month.11,November
+seasons.month.12,December
