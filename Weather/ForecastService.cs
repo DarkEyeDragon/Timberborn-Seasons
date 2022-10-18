@@ -71,19 +71,19 @@ public class ForecastService
         if (_seasonCycleTrackerService.TotalCycles <= _weatherDurationService._handicapCycles)
         {
             forecast.Add(new WeatherInstance(WeatherType.Sun, _seasonCycleTrackerService.TotalCycles,
-                _weatherDurationService._handicapCycles, season.Temperature, 1));
+                _weatherDurationService._handicapCycles, season.Temperature, 1, false));
             totalDuration += _weatherDurationService._handicapCycles;
         }
 
         while (totalDuration < Season.TotalDuration)
         {
             _randomNumberGenerator.Shuffle(modifiers);
-            foreach (var seasonWeather in modifiers)
+            foreach (var waterSourceModifier in modifiers)
             {
                 var random = _randomNumberGenerator.Range(0f, 1f);
-                if (random < seasonWeather.Weight)
+                if (random < waterSourceModifier.Weight)
                 {
-                    var duration = _seasonCycleTrackerService.GenerateDuration(seasonWeather.WeatherType);
+                    var duration = _seasonCycleTrackerService.GenerateWeatherDuration(waterSourceModifier);
                     if (totalDuration + duration < Season.TotalDuration)
                     {
                         totalDuration += duration;
@@ -96,12 +96,12 @@ public class ForecastService
 
                     //totalDuration += duration;
                     var instance =
-                        new WeatherInstance(seasonWeather.WeatherType, totalDuration - duration, duration,
-                            season.Temperature, seasonWeather.Multiplier);
+                        new WeatherInstance(waterSourceModifier.WeatherType, totalDuration - duration, duration,
+                            season.Temperature, waterSourceModifier.Multiplier, waterSourceModifier.IsNegative);
                     forecast.Add(instance);
                     _eventBus.Post(new WeatherChangedEvent(instance));
                     SeasonsPlugin.ConsoleWriter.LogInfo(
-                        $"Forecast Weather: {instance.WeatherType} for {duration} days (x{seasonWeather.Multiplier})");
+                        $"Forecast Weather: {instance.WeatherType} for {duration} days (x{waterSourceModifier.Multiplier})");
                 }
             }
         }
@@ -121,10 +121,10 @@ public class ForecastService
                 continue;
             }
 
-            if (previous.WeatherType == weatherInstance.WeatherType)
+            if (previous.WeatherType == weatherInstance.WeatherType && !weatherInstance.IsNegative)
             {
                 previous = new WeatherInstance(previous.WeatherType, previous.StartDay,
-                    previous.Duration + weatherInstance.Duration, previous.Temperature, previous.StrengthMultiplier);
+                    previous.Duration + weatherInstance.Duration, previous.Temperature, previous.StrengthMultiplier, weatherInstance.IsNegative);
             }
             else
             {

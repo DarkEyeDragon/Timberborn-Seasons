@@ -1,5 +1,6 @@
 ﻿using System;
 using FloodSeason.Seasons.Types;
+using FloodSeason.Weather.Modifiers;
 using Timberborn.Core;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
@@ -37,6 +38,7 @@ public class SeasonCycleTrackerService : ISaveableSingleton, ILoadableSingleton
         _dayNightCycle = dayNightCycle;
     }
 
+    //TODO save state of weather
     public void Save(ISingletonSaver singletonSaver)
     {
         if (_mapEditorMode.IsMapEditor)
@@ -70,43 +72,23 @@ public class SeasonCycleTrackerService : ISaveableSingleton, ILoadableSingleton
         }
     }
 
-    public int GenerateDuration(WeatherType weatherType)
+    public int GenerateWeatherDuration(IModifier modifier)
     {
         var multiplier = _weatherDurationService.DroughtDurationHandicapMultiplier(TotalCycles);
         int duration;
-        switch (weatherType)
+        if (modifier.IsNegative)
         {
-            case WeatherType.Drought:
-            case WeatherType.Flood:
-            {
-                duration = _weatherDurationService.RoundedRandomRange(
-                    multiplier * _weatherDurationService._minDroughtDuration,
-                    multiplier * _weatherDurationService._maxDroughtDuration);
-                break;
-            }
-            default:
-                duration = _weatherDurationService.RoundedRandomRange(
-                    multiplier * _weatherDurationService._minTemperateWeatherDuration,
-                    multiplier * _weatherDurationService._maxTemperateWeatherDuration);
-                break;
+            duration = _weatherDurationService.RoundedRandomRange(
+                multiplier * _weatherDurationService._minDroughtDuration,
+                multiplier * _weatherDurationService._maxDroughtDuration);
+        }
+        else
+        {
+            duration = _weatherDurationService.RoundedRandomRange(
+                multiplier * _weatherDurationService._minTemperateWeatherDuration,
+                multiplier * _weatherDurationService._maxTemperateWeatherDuration);
         }
 
         return duration;
     }
-
-    /*public float GenerateDurationMultiplier(WeatherType weatherType, int duration)
-    {
-        float durationMultiplier = 1;
-        switch (weatherType)
-        {
-            case WeatherType.Drought:
-            case WeatherType.Flood:
-            {
-                durationMultiplier = _weatherDurationService.DroughtDurationHandicapMultiplier(TotalCycles + duration);
-                break;
-            }
-        }
-
-        return durationMultiplier;
-    }*/
 }

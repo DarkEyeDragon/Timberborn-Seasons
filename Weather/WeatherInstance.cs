@@ -12,15 +12,17 @@ public class WeatherInstance
     public int StartDay { get; }
     public int EndDay => StartDay + Duration;
     public float StrengthMultiplier { get; }
+    public bool IsNegative { get; }
 
     public WeatherInstance(WeatherType weatherType, int startDay, int duration, int temperature,
-        float strengthMultiplier)
+        float strengthMultiplier, bool isNegative)
     {
         WeatherType = weatherType;
         StartDay = startDay;
         Duration = duration;
         Temperature = temperature;
         StrengthMultiplier = strengthMultiplier;
+        IsNegative = isNegative;
     }
 
     public override string ToString()
