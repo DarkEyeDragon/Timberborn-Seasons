@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
+using FloodSeason.Config;
 using HarmonyLib;
 using TimberApi.ConsoleSystem;
 using TimberApi.ModSystem;
@@ -10,10 +12,13 @@ namespace FloodSeason
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class SeasonsPlugin : IModEntrypoint
     {
+        public static SeasonConfig Config;
         public static IConsoleWriter ConsoleWriter;
         public void Entry(IMod mod, IConsoleWriter consoleWriter)
         {
             // Plugin startup logic
+            ConfigHandler configHandler = new ConfigHandler();
+            configHandler.Load($"{mod.DirectoryPath}/config.json");
             ConsoleWriter = consoleWriter;
             var harmony = new Harmony("me.darkeyedragon.seasons");
             var assembly = Assembly.GetExecutingAssembly();

@@ -30,7 +30,7 @@ public class DryObjectPatch
         var seasonService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonService>();
         if (!__instance.IsDry || seasonService.CurrentSeason is Winter)
             return;
-        __instance.InternalExitDryState();
+        __instance.EnterDryState();
     }
     
     /*[HarmonyPatch(typeof(DryObject), nameof(DryObject.InternalEnterDryState))]
