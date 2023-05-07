@@ -1,18 +1,31 @@
-﻿using FloodSeason.Weather;
-using FloodSeason.Weather.Modifiers;
+﻿using FloodSeason.Seasons.Textures;
+using FloodSeason.WeatherLogic;
+using FloodSeason.WeatherLogic.Modifiers;
+using Timberborn.Common;
 
 namespace FloodSeason.Seasons.Types;
 
-public class Autumn : Season
+public class Autumn : SeasonType
 {
     private static float _baseMultiplier = 1.2f;
     public override string Name => "Autumn";
-    public override int Temperature => 15;
-    public override IModifier[] Modifiers { get; } = new[]
+    public override MinMax<int> TemperatureRange => new(5, 15);
+
+    public override IModifier[] Modifiers { get; } =
     {
         new WaterSourceModifier(0.2f, _baseMultiplier, WeatherType.Sun),
         new WaterSourceModifier(0.4f, _baseMultiplier * 1.3f, WeatherType.Rain),
         new WaterSourceModifier(0.2f, _baseMultiplier * 3f, WeatherType.Flood),
         new WaterSourceModifier(0.3f, _baseMultiplier, WeatherType.Wind)
     };
+
+    public override int Order => 2;
+
+    public override TexturePath TexturePath => new()
+    {
+        PathDesert = null,
+        PathGrass = base.TexturePath.PathGrass
+    };
+
+    public override bool IsDifficult => false;
 }

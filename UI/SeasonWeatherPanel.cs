@@ -1,12 +1,14 @@
 ﻿using System;
 using FloodSeason.Seasons;
-using FloodSeason.Weather;
+using FloodSeason.WeatherLogic;
 using Timberborn.CoreUI;
 using Timberborn.GameSound;
 using Timberborn.GameUI;
 using Timberborn.Localization;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
+using Timberborn.WeatherSystem;
+using Timberborn.WeatherSystemUI;
 using Timberborn.WellbeingUI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -32,12 +34,13 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
     private readonly GameLayout _gameLayout;
     private readonly VisualElementLoader _visualElementLoader;
     private readonly SeasonService _seasonService;
-    private readonly SeasonWeatherService _weatherService;
+    private readonly WeatherService _weatherService;
     private readonly ILoc _loc;
     private readonly GameUISoundController _gameUISoundController;
     private readonly ITooltipRegistrar _tooltipRegistrar;
     private readonly PanelStack _panelStack;
     private readonly IDayNightCycle _dayNightCycle;
+    private readonly SeasonCycleTrackerService _seasonCycleTrackerService;
     private VisualElement _root;
     private Label _forecastCounter;
     private VisualElement _forecastIcon;
@@ -47,31 +50,30 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
     private bool _midBlink;
     private bool _pausedUntilTimeUnpaused;
     private string _tooltipText;
-    private readonly ForecastService _forecastService;
     private Button _forecast;
+    private bool _initialBlink;
 
     public SeasonWeatherPanel(
         GameLayout gameLayout,
         VisualElementLoader visualElementLoader,
         SeasonService seasonService,
-        SeasonWeatherService weatherService,
-        ForecastService forecastService,
+        WeatherService weatherService,
         ILoc loc,
         GameUISoundController gameUISoundController,
         ITooltipRegistrar tooltipRegistrar,
         PanelStack panelStack,
-        IDayNightCycle dayNightCycle)
+        IDayNightCycle dayNightCycle, SeasonCycleTrackerService seasonCycleTrackerService)
     {
         _gameLayout = gameLayout;
         _visualElementLoader = visualElementLoader;
         _seasonService = seasonService;
         _weatherService = weatherService;
-        _forecastService = forecastService;
         _loc = loc;
         _gameUISoundController = gameUISoundController;
         _tooltipRegistrar = tooltipRegistrar;
         _panelStack = panelStack;
         _dayNightCycle = dayNightCycle;
+        _seasonCycleTrackerService = seasonCycleTrackerService;
     }
 
     public void Load()
@@ -82,7 +84,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
         _forecastCounter = _root.Q<Label>("ForecastCounter");
         _forecastIcon = _root.Q<VisualElement>("ForecastIcon");
         _gameLayout.AddTopRight(_root, 6);
-        UpdatePanel();
+        UpdatePanel(true);
         _pausedUntilTimeUnpaused = true;
     }
 
@@ -92,57 +94,42 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
             _pausedUntilTimeUnpaused = false;
         if (_pausedUntilTimeUnpaused)
             return;
-        UpdatePanel();
+        UpdatePanel(false);
     }
 
-    private void UpdatePanel()
+    private void UpdatePanel(bool blockBlinking)
     {
-        /*var currentWeather = _forecastService.CurrentWeather;
-        var duration = currentWeather.Duration;
-        var partial = duration - _weatherService.PartialCycleDay;
-        //var remaining = duration - partial;
-        float progressBarValue = duration / partial;
-        SetPanelContent($"{_forecastService.CurrentWeather}", progressBarValue, _weatherService);
-        _root.AddToClassList(DryClass);
-
-        switch (_forecastService.CurrentWeather.WeatherType)
+        int remainingDays = _seasonService.CurrentSeason.RemainingDays.Count - 1;
+        float partialCycleDay = _weatherService.PartialCycleDay;
+        if (_seasonService.CurrentSeason.SeasonType.IsDifficult)
         {
-            case WeatherType.Drought:
+            if (!blockBlinking && _initialBlink)
             {
-                _root.AddToClassList(DryClass);
-                break;
+                _initialBlink = false;
+                StartBlinking();
             }
-            case WeatherType.Sun:
-                _root.AddToClassList(DryClass);
-                break;
-            case WeatherType.Rain:
-                _root.RemoveFromClassList(DryClass);
-                break;
-            case WeatherType.Wind:
-                _root.RemoveFromClassList(DryClass);
-                break;
-            case WeatherType.Flood:
-                _root.RemoveFromClassList(DryClass);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }*/
-        var currentWeather = _forecastService.CurrentWeather;
-        _tooltipText =
-            $"{currentWeather.WeatherType} {currentWeather.Progress + _dayNightCycle.DayProgress:F1}/{currentWeather.Duration}";
-        var remaining = currentWeather.Duration - (currentWeather.Progress + _dayNightCycle.DayProgress);
-        _forecastCounter.text =
-            _loc.T(CounterLocKey, remaining.ToString("F1"));
+            float duration = remainingDays - partialCycleDay;
+            float progressBarValue = duration / _seasonService.CurrentSeason.TotalDays;
+            SetPanelContent(_loc.T(DroughtInProgressLocKey), progressBarValue, duration, _remainingBlinks > 0 && NextBlinkingBarState());
+            _root.AddToClassList(DryClass);
+        }
+        else
+        {
+            SetPanelContent(_loc.T(UnknownLocKey), 0.0f, 0.0f);
+            _root.RemoveFromClassList(DryClass);
+            _initialBlink = true;
+        }
     }
 
     private void SetPanelContent(
         string forecast,
         float progressBarValue,
-        float duration)
+        float duration,
+        bool blink = false)
     {
         _progress.SetProgress(Math.Max(progressBarValue, 0.0f));
         //_root.EnableInClassList(BlinkingClass, blink);
-        //_forecastCounter.parent.ToggleDisplayStyle(forecastCount > 0.0);
+        _forecastCounter.parent.ToggleDisplayStyle(duration > 0.0);
         _forecastCounter.text = _loc.T(CounterLocKey, duration.ToString("F1"));
         //_forecastIcon.EnableInClassList(DryIncomingClass, droughtIncoming);
         _tooltipText = forecast;
@@ -165,7 +152,6 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
             --_remainingBlinks;
             _midBlink = !_midBlink;
         }
-
         return _midBlink;
     }
 }

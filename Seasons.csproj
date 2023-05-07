@@ -26,5 +26,6 @@
   <ItemGroup>
     <Folder Include="Configurators" />
     <Folder Include="UI\Fragments" />
+    <Folder Include="Utils" />
   </ItemGroup>
 </Project>

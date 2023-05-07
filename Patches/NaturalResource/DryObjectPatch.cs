@@ -23,15 +23,15 @@ public class DryObjectPatch
         return true;
     }*/
     
-    [HarmonyPatch(typeof(DryObject), nameof(DryObject.ExitDryState))]
+    /*[HarmonyPatch(typeof(DryObject), nameof(DryObject.ExitDryState))]
     [HarmonyPrefix]
     static void ExitDryState(DryObject __instance)
     {
         var seasonService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonService>();
-        if (!__instance.IsDry || seasonService.CurrentSeason is Winter)
+        if (!__instance.IsDry || seasonService.CurrentSeason.SeasonType.IsDifficult)
             return;
         __instance.EnterDryState();
-    }
+    }*/
     
     /*[HarmonyPatch(typeof(DryObject), nameof(DryObject.InternalEnterDryState))]
     [HarmonyPostfix]

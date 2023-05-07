@@ -1,7 +1,7 @@
 ﻿using Bindito.Core;
 using FloodSeason.Growing;
 using FloodSeason.Seasons;
-using FloodSeason.Weather;
+using FloodSeason.WeatherLogic;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using Timberborn.Debugging;
@@ -13,11 +13,10 @@ public class SeasonWeatherSystemConfigurator : IConfigurator
 {
     public void Configure(IContainerDefinition containerDefinition)
     {
-        containerDefinition.Bind<ForecastService>().AsSingleton();
+        containerDefinition.Bind<SeasonCycleTrackerService>().AsSingleton();
         containerDefinition.Bind<PlantableService>().AsSingleton();
         containerDefinition.Bind<SeasonService>().AsSingleton();
         containerDefinition.Bind<SeasonWeatherService>().AsSingleton();
-        containerDefinition.Bind<SeasonCycleTrackerService>().AsSingleton();
         containerDefinition.MultiBind<IConsoleModule>().To<SeasonConsoleModule>().AsSingleton();
     }
 }

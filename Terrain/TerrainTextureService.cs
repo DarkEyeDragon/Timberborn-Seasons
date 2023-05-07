@@ -2,6 +2,8 @@
 using FloodSeason.Seasons;
 using FloodSeason.Seasons.Types;
 using Timberborn.AssetSystem;
+using Timberborn.NaturalResources;
+using Timberborn.NaturalResourcesUI;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.TerrainSystem;
@@ -22,7 +24,6 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
     private readonly SeasonService _seasonService;
     private readonly EventBus _eventBus;
 
-    private string _dryTexturePath;
     private string _seasonTexturePath;
 
     public Texture DryTexture { get; set; }
@@ -42,13 +43,13 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
     [OnEvent]
     public void OnSeasonChangeEvent(SeasonChangedEvent changedEvent) => UpdateState(changedEvent.Season);
 
-    public void UpdateState(Season season)
+    private void UpdateState(Season season)
     {
-        if (season is Winter)
+        if (season.SeasonType.TexturePath?.PathDesert != null)
         {
             SeasonsPlugin.ConsoleWriter.LogInfo("Switch to Winter Terrain");
             Shader.SetGlobalTexture(TerrainMaterialMap.DesertTextureProperty, _resourceAssetLoader
-                .Load<Material>($"{PluginInfo.PLUGIN_GUID}/seasons/Desert-Winter")
+                .Load<Material>(season.SeasonType.TexturePath.PathDesert)
                 .mainTexture);
         }
         else
@@ -65,6 +66,7 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
 
     private void UpdateTerrainMesh(Season season)
     {
+        
         foreach (var (key, value) in _terrainMeshManager._tiles)
         {
             var renderer = value.GetComponent<MeshRenderer>();
@@ -78,18 +80,17 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
                         SeasonTexture = material.GetTexture(BaseAlbedoTex);
                     }
 
-                    if (season is not Spring && season is not null)
+                    if (season.SeasonType.TexturePath?.PathGrass is null)
                     {
-                        _seasonTexturePath = $"{PluginInfo.PLUGIN_GUID}/seasons/Grass-{season.Name}";
+                        material.SetTexture(BaseAlbedoTex, SeasonTexture);
+                    }
+                    else
+                    {
+                        _seasonTexturePath = season.SeasonType.TexturePath.PathGrass;
                         material.SetTexture(BaseAlbedoTex,
                             _resourceAssetLoader
                                 .Load<Material>(_seasonTexturePath)
                                 .mainTexture);
-                    }
-                    else
-                    {
-                        material.SetTexture(BaseAlbedoTex, SeasonTexture);
-                        _seasonTexturePath = "";
                     }
                 }
             }
@@ -99,7 +100,6 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
     public void PostLoad()
     {
         DryTexture = Shader.GetGlobalTexture(TerrainMaterialMap.DesertTextureProperty);
-        SeasonsPlugin.ConsoleWriter.LogInfo($"DryTexture: {DryTexture.name}");
         UpdateState(_seasonService.CurrentSeason);
     }
 

@@ -1,33 +1,18 @@
-﻿using FloodSeason.Growing;
-using FloodSeason.Seasons;
-using FloodSeason.Seasons.Types;
+﻿using FloodSeason.Seasons;
 using HarmonyLib;
-using Timberborn.NaturalResourcesLifeCycle;
 using Timberborn.NaturalResourcesMoisture;
-using Timberborn.TimeSystem;
 
 namespace FloodSeason.Patches.NaturalResource;
 
-/*[HarmonyPatch]
+[HarmonyPatch(typeof(WateredNaturalResource), nameof(WateredNaturalResource.StartDryingOut))]
 public class WateredNaturalResourcePatch
 {
-    [HarmonyPatch(typeof(WateredNaturalResource), nameof(WateredNaturalResource.StartDryingOut))]
-    [HarmonyPostfix]
-    static void StartDryingOut(ref LivingNaturalResource ____livingNaturalResource, ref ITimeTrigger ____timeTrigger)
+    static bool Prefix()
     {
-        SeasonsPlugin.ConsoleWriter.LogInfo("StartDryingOut");
+        SeasonsPlugin.ConsoleWriter.LogInfo($"Triggered {nameof(WateredNaturalResourcePatch)}");
         var seasonService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonService>();
-        if (!____livingNaturalResource.IsDead && seasonService.CurrentSeason is Winter)
-            ____timeTrigger.Resume();
+        //TODO implement min growing temp for plants
+        //Skip reset timer if freezing since we dont want to resume growing yet.
+        return seasonService.CurrentSeason.CurrentDay.Temperature > 0;
     }
-    
-    [HarmonyPatch(typeof(WateredNaturalResource), nameof(WateredNaturalResource.StopDryingOut))]
-    [HarmonyPostfix]
-    static void StopDryingOut(ref LivingNaturalResource ____livingNaturalResource, ref ITimeTrigger ____timeTrigger)
-    {
-        SeasonsPlugin.ConsoleWriter.LogInfo("StopDryingOut");
-        var seasonService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonService>();
-        if (!____livingNaturalResource.IsDead && seasonService.CurrentSeason is Winter)
-            ____timeTrigger.Resume();
-    }
-}*/
+}

@@ -1,7 +1,8 @@
 ﻿using System;
 using Bindito.Core;
+using FloodSeason.Calender;
 using FloodSeason.Seasons;
-using FloodSeason.Weather;
+using FloodSeason.WeatherLogic;
 using Timberborn.TickSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WaterSourceSystem;
@@ -19,21 +20,18 @@ public class SeasonWaterSourceController : TickableComponent
     private SeasonWeatherService _weatherService;
     private double _oldSpecifiedStrength;
     private float _changeDurationInDays;
-    private ForecastService _forecastService;
 
     [Inject]
     public void InjectDependencies(
         WaterSimulationSettings waterSimulationSettings,
         SeasonService seasonService,
         SeasonWeatherService weatherService,
-        IDayNightCycle dayNightCycle,
-        ForecastService forecastService)
+        IDayNightCycle dayNightCycle)
     {
         _waterSimulationSettings = waterSimulationSettings;
         _seasonService = seasonService;
         _weatherService = weatherService;
         _dayNightCycle = dayNightCycle;
-        _forecastService = forecastService;
     }
 
     public void Awake()
@@ -66,11 +64,11 @@ public class SeasonWaterSourceController : TickableComponent
 
     private void UpdateStrength()
     {
-        //var season = _seasonService.CurrentSeason;
+        var season = _seasonService.CurrentSeason;
         float currentStrength = _waterSource.CurrentStrength;
-        var currentWeather = _forecastService.CurrentWeather;
+        var currentWeather = _seasonService;
         //if(_weatherService.CurrentWeather.ActiveEvent)
-        float targetStrength = _waterSource.SpecifiedStrength * currentWeather.StrengthMultiplier;
+        float targetStrength = _waterSource.SpecifiedStrength * currentWeather.CurrentSeason.CurrentDay.Modifier.Multiplier;
         if (Math.Abs(currentStrength - targetStrength) < 0.00001)
             return;
         _waterSource.CurrentStrength = CalculateNewStrength(currentStrength, targetStrength);
@@ -80,10 +78,29 @@ public class SeasonWaterSourceController : TickableComponent
     {
         float num1 = targetStrength - currentStrength;
         float changeBooster = 0;
-        if (_forecastService.PreviousWeather is { WeatherType: WeatherType.Flood } || _forecastService.CurrentWeather is { WeatherType: WeatherType.Flood })
+        var currentDay = _seasonService.CurrentSeason.CurrentDay;
+        var currentSeason = _seasonService.CurrentSeason;
+        var dayIndex = _seasonService.CurrentSeason.PassedDays.Count;
+        if (currentSeason.PassedDays.Count != 0)
         {
-            changeBooster = 0.5f;
+            Day previousDay;
+            if (dayIndex >= 1)
+            {
+                previousDay = currentSeason.PassedDays[dayIndex - 1];
+            }
+            else
+            {
+                var passedDays = _seasonService.PreviousSeason.PassedDays;
+                previousDay = passedDays[^2];
+            }
+            if (currentDay.Modifier.WeatherType == WeatherType.Flood ||
+                previousDay.Modifier.WeatherType == WeatherType.Flood)
+            {
+                changeBooster = 0.5f;
+            }
         }
+
+
         float num2 = (_waterSimulationSettings.MaxWaterSourceChangePerSecond + changeBooster) * Time.fixedDeltaTime;
         if (Math.Abs(num1) < num2)
             return targetStrength;

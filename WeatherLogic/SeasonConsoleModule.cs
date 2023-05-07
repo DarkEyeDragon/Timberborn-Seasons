@@ -1,7 +1,7 @@
 ﻿using FloodSeason.Seasons;
 using Timberborn.Debugging;
 
-namespace FloodSeason.Weather;
+namespace FloodSeason.WeatherLogic;
 
 public class SeasonConsoleModule : IConsoleModule
 {

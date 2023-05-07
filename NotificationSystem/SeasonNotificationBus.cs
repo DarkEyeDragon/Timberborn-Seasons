@@ -1,5 +1,5 @@
 ﻿using System;
-using FloodSeason.Weather;
+using FloodSeason.WeatherLogic;
 using Timberborn.EntitySystem;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ public class SeasonNotificationBus
     public void Post(string description, GameObject subject)
     {
         Guid entityId = subject.GetComponent<EntityComponent>().EntityId;
-        var notification = new CustomNotification(description, entityId, _seasonCycleTrackerService.Year, _seasonCycleTrackerService.Month, _seasonCycleTrackerService.Day);
+        var notification = new CustomNotification(description, entityId, _seasonCycleTrackerService.Cycle, _seasonCycleTrackerService.Day);
         EventHandler<CustomNotificationEventArgs> notificationPosted = NotificationPosted;
         if (notificationPosted == null)
             return;

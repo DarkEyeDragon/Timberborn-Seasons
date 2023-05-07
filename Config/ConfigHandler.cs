@@ -22,6 +22,7 @@ public class ConfigHandler
 
     private static SeasonConfig CreateDefaultConfig(string path)
     {
+        SeasonsPlugin.ConsoleWriter.LogInfo("Creating default config...");
         var config = new SeasonConfig();
         File.WriteAllText(path, JsonConvert.SerializeObject(config));
         return config;

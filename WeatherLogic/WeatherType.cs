@@ -1,4 +1,4 @@
-﻿namespace FloodSeason.Weather;
+﻿namespace FloodSeason.WeatherLogic;
 
 public enum WeatherType
 {

@@ -1,4 +1,4 @@
-﻿namespace FloodSeason.Weather.Modifiers;
+﻿namespace FloodSeason.WeatherLogic.Modifiers;
 
 public interface IModifier
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using FloodSeason.Weather;
+using FloodSeason.WeatherLogic;
 using HarmonyLib;
 using Timberborn.EntitySystem;
 using Timberborn.NotificationSystem;
@@ -14,7 +14,7 @@ public class NotificationBusPatch
     {
         Guid entityId = subject.GetComponent<EntityComponent>().EntityId;
         var seasonWeatherService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonCycleTrackerService>();
-        Notification notification = new Notification(description, entityId, seasonWeatherService.Month, seasonWeatherService.Day);
+        Notification notification = new Notification(description, entityId, seasonWeatherService.Cycle, seasonWeatherService.Day);
         EventHandler<NotificationEventArgs> notificationPosted = ___NotificationPosted;
         if (notificationPosted == null) return false;
         notificationPosted(seasonWeatherService, new NotificationEventArgs(notification));

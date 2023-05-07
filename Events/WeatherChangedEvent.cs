@@ -1,14 +1,13 @@
 ﻿using FloodSeason.Seasons;
-using FloodSeason.Weather;
 
 namespace FloodSeason.Events;
 
 public class WeatherChangedEvent
 {
-    public WeatherInstance WeatherInstance { get; }
+    public WeatherLogic.Weather Weather { get; }
 
-    public WeatherChangedEvent(WeatherInstance weatherInstance)
+    public WeatherChangedEvent(WeatherLogic.Weather weather)
     {
-        WeatherInstance = weatherInstance;
+        Weather = weather;
     }
 }

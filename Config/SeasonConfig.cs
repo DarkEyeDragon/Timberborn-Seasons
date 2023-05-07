@@ -6,7 +6,7 @@ namespace FloodSeason.Config;
 
 public class SeasonConfig
 {
-    private List<Season> Seasons = new List<Season>();
+    private List<SeasonType> Seasons = new();
 
     public SeasonConfig()
     {

@@ -9,7 +9,7 @@ using Timberborn.SoilMoistureSystem;
 
 namespace FloodSeason.Patches.NaturalResource;
 
-[HarmonyPatch(typeof(NaturalResourceMoistureFragment), nameof(NaturalResourceMoistureFragment.BuildDescription))]
+/*[HarmonyPatch(typeof(NaturalResourceMoistureFragment), nameof(NaturalResourceMoistureFragment.BuildDescription))]
 public class NaturalResourceMoistureFragmentPatch
 {
     static void Postfix(ref string __result, NaturalResourceMoistureFragment __instance,
@@ -30,8 +30,9 @@ public class NaturalResourceMoistureFragmentPatch
             __result = __instance.DescribeDeadResource();
             return;
         }
-        if (seasonService.CurrentSeason is Winter)
+        if (seasonService.CurrentSeason.CurrentDay.Temperature <= 0)
         {
+            
             __result = iLoc.T("seasons.growable.paused", $"{____wateredNaturalResource.DaysLeft:0.0}");
             return;
         }
@@ -45,4 +46,4 @@ public class NaturalResourceMoistureFragmentPatch
             ? __instance.DescribeParchedOrFloodedResource()
             : iLoc.T(NaturalResourceMoistureFragment.WateredLocKey);
     }
-}
+}*/

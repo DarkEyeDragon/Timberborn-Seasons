@@ -5,21 +5,28 @@ using System.Linq;
 using FloodSeason.Events;
 using FloodSeason.Seasons;
 using FloodSeason.Seasons.Types;
-using FloodSeason.Weather.Modifiers;
+using FloodSeason.WeatherLogic;
+using FloodSeason.WeatherLogic.Modifiers;
 using Timberborn.Common;
+using Timberborn.Core;
+using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.WeatherSystem;
 using UnityEngine;
 
-namespace FloodSeason.Weather;
+/*namespace FloodSeason.Weather;
 
-public class ForecastService
+public class ForecastService : ISaveableSingleton, ILoadableSingleton
 {
+    private static readonly SingletonKey ForeServiceKey = new(nameof(ForecastService));
+
+    
     private readonly IRandomNumberGenerator _randomNumberGenerator;
     private readonly EventBus _eventBus;
     private readonly WeatherDurationService _weatherDurationService;
     private readonly SeasonCycleTrackerService _seasonCycleTrackerService;
-    private Queue<WeatherInstance> _forecast = new(4);
+    private readonly MapEditorMode _mapEditorMode;
+    private Queue<WeatherLogic.Weather> _forecast = new(4);
 
     public WeatherInstance CurrentWeather { get; private set; }
     public WeatherInstance PreviousWeather { get; private set; }
@@ -27,12 +34,14 @@ public class ForecastService
     public bool Finished { get; private set; }
 
     public ForecastService(IRandomNumberGenerator randomNumberGenerator, EventBus eventBus,
-        WeatherDurationService weatherDurationService, SeasonCycleTrackerService seasonCycleTrackerService)
+        WeatherDurationService weatherDurationService, SeasonCycleTrackerService seasonCycleTrackerService,
+        MapEditorMode mapEditorMode)
     {
         _randomNumberGenerator = randomNumberGenerator;
         _eventBus = eventBus;
         _weatherDurationService = weatherDurationService;
         _seasonCycleTrackerService = seasonCycleTrackerService;
+        _mapEditorMode = mapEditorMode;
     }
 
     public void Initialize(Season season)
@@ -67,11 +76,11 @@ public class ForecastService
     {
         var modifiers = season.Modifiers.OfType<WaterSourceModifier>().ToArray();
         var totalDuration = 0;
-        var forecast = new List<WeatherInstance>();
+        var forecast = new List<WeatherLogic.Weather>();
         if (_seasonCycleTrackerService.TotalCycles <= _weatherDurationService._handicapCycles)
         {
             forecast.Add(new WeatherInstance(WeatherType.Sun, _seasonCycleTrackerService.TotalCycles,
-                _weatherDurationService._handicapCycles, season.Temperature, 1, false));
+                _weatherDurationService._handicapCycles, season.TemperatureRange, 1, false));
             totalDuration += _weatherDurationService._handicapCycles;
         }
 
@@ -97,7 +106,7 @@ public class ForecastService
                     //totalDuration += duration;
                     var instance =
                         new WeatherInstance(waterSourceModifier.WeatherType, totalDuration - duration, duration,
-                            season.Temperature, waterSourceModifier.Multiplier, waterSourceModifier.IsNegative);
+                            season.TemperatureRange, waterSourceModifier.Multiplier, waterSourceModifier.IsNegative);
                     forecast.Add(instance);
                     _eventBus.Post(new WeatherChangedEvent(instance));
                     SeasonsPlugin.ConsoleWriter.LogInfo(
@@ -124,7 +133,8 @@ public class ForecastService
             if (previous.WeatherType == weatherInstance.WeatherType && !weatherInstance.IsNegative)
             {
                 previous = new WeatherInstance(previous.WeatherType, previous.StartDay,
-                    previous.Duration + weatherInstance.Duration, previous.Temperature, previous.StrengthMultiplier, weatherInstance.IsNegative);
+                    previous.Duration + weatherInstance.Duration, previous.Temperature, previous.StrengthMultiplier,
+                    weatherInstance.IsNegative);
             }
             else
             {
@@ -142,4 +152,17 @@ public class ForecastService
 
         return new Queue<WeatherInstance>(forecast);
     }
-}
+
+    public void Save(ISingletonSaver singletonSaver)
+    {
+        if (_mapEditorMode.IsMapEditor)
+            return;
+        IObjectSaver singleton = singletonSaver.GetSingleton(ForeServiceKey);
+        singleton.Set();
+    }
+
+    public void Load()
+    {
+        throw new NotImplementedException();
+    }
+}*/
