@@ -1,7 +1,7 @@
-﻿using FloodSeason.WeatherLogic.Modifiers;
+﻿using Seasons.WeatherLogic.Modifiers;
 using Timberborn.Persistence;
 
-namespace FloodSeason.WeatherLogic.Serializers;
+namespace Seasons.WeatherLogic.Serializers;
 
 public class WaterSourceModifierSerializer : IObjectSerializer<WaterSourceModifier>
 {

@@ -1,4 +1,4 @@
-﻿namespace FloodSeason.Patches.Notifications;
+﻿namespace Seasons.Patches.Notifications;
 
 /*[HarmonyPatch(typeof(NotificationSystemConfigurator), nameof(NotificationSystemConfigurator.Configure))]
 public class NotificationSystemConfiguratorPatch

@@ -1,11 +1,10 @@
 ﻿using Bindito.Core;
-using FloodSeason.Calender;
-using FloodSeason.WeatherLogic.Modifiers;
-using FloodSeason.WeatherLogic.Serializers;
+using Seasons.Calender;
+using Seasons.WeatherLogic.Serializers;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 
-namespace FloodSeason.WeatherLogic;
+namespace Seasons.WeatherLogic;
 
 [Configurator(SceneEntrypoint.InGame)]
 public class WeatherConfigurator : IConfigurator

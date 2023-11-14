@@ -1,10 +1,8 @@
 ﻿using System;
-using Timberborn.EntitySystem;
 using Timberborn.Growing;
-using Timberborn.Persistence;
 using UnityEngine;
 
-namespace FloodSeason.Growing;
+namespace Seasons.Growing;
 
 public class HibernateObject : MonoBehaviour
 {

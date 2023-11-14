@@ -1,6 +1,6 @@
 ﻿using Timberborn.Common;
 
-namespace FloodSeason.Extensions;
+namespace Seasons.Extensions;
 
 public static class RandomNumberGeneratorExtension
 {

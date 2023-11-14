@@ -1,11 +1,6 @@
-﻿using System.Net.NetworkInformation;
-using FloodSeason.Seasons;
-using HarmonyLib;
-using Timberborn.NaturalResourcesMoisture;
+﻿namespace Seasons.Patches.NaturalResource;
 
-namespace FloodSeason.Patches.NaturalResource;
-
-[HarmonyPatch(typeof(WaterNaturalResource), nameof(WaterNaturalResource.WaterNeedsAreMet), MethodType.Getter)]
+/*[HarmonyPatch(typeof(WateredNaturalResource), nameof(WateredNaturalResource.WaterNeedsAreMet), MethodType.Getter)]
 public class WaterNaturalResourcePatch
 {
     static bool Prefix(ref bool __result)
@@ -18,4 +13,4 @@ public class WaterNaturalResourcePatch
         }
         return true;
     }
-}
+}*/

@@ -1,7 +1,6 @@
-﻿using FloodSeason.Exceptions;
-using FloodSeason.WeatherLogic.Modifiers;
+﻿using Seasons.WeatherLogic.Modifiers;
 
-namespace FloodSeason.WeatherLogic;
+namespace Seasons.WeatherLogic;
 
 public class Weather
 {

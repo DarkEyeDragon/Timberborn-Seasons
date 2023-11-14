@@ -1,13 +1,6 @@
-﻿using System;
-using FloodSeason.WeatherLogic;
-using HarmonyLib;
-using Timberborn.EntitySystem;
-using Timberborn.NotificationSystem;
-using UnityEngine;
+﻿namespace Seasons.Patches.Notifications;
 
-namespace FloodSeason.Patches.Notifications;
-
-[HarmonyPatch(typeof(NotificationBus), nameof(NotificationBus.Post))]
+/*[HarmonyPatch(typeof(NotificationBus), nameof(NotificationBus.Post))]
 public class NotificationBusPatch
 {
     static bool Prefix(string description, GameObject subject, ref EventHandler<NotificationEventArgs> ___NotificationPosted)
@@ -20,4 +13,4 @@ public class NotificationBusPatch
         notificationPosted(seasonWeatherService, new NotificationEventArgs(notification));
         return false;
     }
-}
+}*/

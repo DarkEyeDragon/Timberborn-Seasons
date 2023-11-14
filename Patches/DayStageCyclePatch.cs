@@ -1,9 +1,9 @@
-﻿using FloodSeason.Seasons;
-using HarmonyLib;
+﻿using HarmonyLib;
+using Seasons.Seasons;
 using Timberborn.SkySystem;
 using UnityEngine;
 
-namespace FloodSeason.Patches;
+namespace Seasons.Patches;
 
 [HarmonyPatch(typeof(DayStageCycle), nameof(DayStageCycle.Transition), typeof(DayStage), typeof(DayStage), typeof(float))]
 public class DayStageCyclePatch

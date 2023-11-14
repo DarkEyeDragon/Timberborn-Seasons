@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using FloodSeason.Seasons.Types;
-using TimberApi.ConfigSystem;
+using Seasons.Seasons.Types;
 
-namespace FloodSeason.Config;
+namespace Seasons.Config;
 
 public class SeasonConfig
 {

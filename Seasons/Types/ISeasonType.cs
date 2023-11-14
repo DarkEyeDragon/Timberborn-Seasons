@@ -1,6 +1,6 @@
-﻿using FloodSeason.Seasons.Textures;
+﻿using Seasons.Seasons.Textures;
 
-namespace FloodSeason.Seasons.Types;
+namespace Seasons.Seasons.Types;
 
 public interface ISeasonType
 {

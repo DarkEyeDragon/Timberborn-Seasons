@@ -1,9 +1,9 @@
 ﻿using System;
-using FloodSeason.WeatherLogic;
+using Seasons.WeatherLogic;
 using Timberborn.EntitySystem;
 using UnityEngine;
 
-namespace FloodSeason.NotificationSystem;
+namespace Seasons.NotificationSystem;
 
 public class SeasonNotificationBus
 {

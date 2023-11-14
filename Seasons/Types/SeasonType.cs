@@ -1,8 +1,8 @@
-using FloodSeason.Seasons.Textures;
-using FloodSeason.WeatherLogic.Modifiers;
+using Seasons.Seasons.Textures;
+using Seasons.WeatherLogic.Modifiers;
 using Timberborn.Common;
 
-namespace FloodSeason.Seasons.Types;
+namespace Seasons.Seasons.Types;
 
 public abstract class SeasonType : ISeasonType
 {

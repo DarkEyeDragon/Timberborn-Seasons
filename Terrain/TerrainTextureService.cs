@@ -1,16 +1,12 @@
-﻿using FloodSeason.Events;
-using FloodSeason.Seasons;
-using FloodSeason.Seasons.Types;
+﻿using Seasons.Events;
+using Seasons.Seasons;
 using Timberborn.AssetSystem;
-using Timberborn.NaturalResources;
-using Timberborn.NaturalResourcesUI;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.TerrainSystem;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-namespace FloodSeason.Terrain;
+namespace Seasons.Terrain;
 
 public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
 {

@@ -1,9 +1,8 @@
 ﻿using Bindito.Core;
 using Timberborn.Growing;
-using Timberborn.NaturalResourcesLifeCycle;
 using Timberborn.TemplateSystem;
 
-namespace FloodSeason.Growing;
+namespace Seasons.Growing;
 
 public class GrowingTemplateModuleProvider : IProvider<TemplateModule>
 {

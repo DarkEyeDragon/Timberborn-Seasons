@@ -1,6 +1,4 @@
-﻿using FloodSeason.Seasons;
-
-namespace FloodSeason.Events;
+﻿namespace Seasons.Events;
 
 public class WeatherChangedEvent
 {

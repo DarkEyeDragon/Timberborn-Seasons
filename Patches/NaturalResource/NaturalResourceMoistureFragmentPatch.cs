@@ -1,13 +1,4 @@
-﻿using FloodSeason.Seasons;
-using FloodSeason.Seasons.Types;
-using HarmonyLib;
-using Timberborn.Localization;
-using Timberborn.NaturalResourcesLifeCycle;
-using Timberborn.NaturalResourcesMoisture;
-using Timberborn.NaturalResourcesMoistureUI;
-using Timberborn.SoilMoistureSystem;
-
-namespace FloodSeason.Patches.NaturalResource;
+﻿namespace Seasons.Patches.NaturalResource;
 
 /*[HarmonyPatch(typeof(NaturalResourceMoistureFragment), nameof(NaturalResourceMoistureFragment.BuildDescription))]
 public class NaturalResourceMoistureFragmentPatch

@@ -3,7 +3,7 @@ using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using Timberborn.TemplateSystem;
 
-namespace FloodSeason.Growing;
+namespace Seasons.Growing;
 
 [Configurator(SceneEntrypoint.InGame)]
 public class GrowingConfigurator : IConfigurator

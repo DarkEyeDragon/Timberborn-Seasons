@@ -1,12 +1,12 @@
 ﻿using Bindito.Core;
-using FloodSeason.Growing;
-using FloodSeason.Seasons;
-using FloodSeason.WeatherLogic;
+using Seasons.Growing;
+using Seasons.Seasons;
+using Seasons.WeatherLogic;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using Timberborn.Debugging;
 
-namespace FloodSeason.WeatherSystem;
+namespace Seasons.WeatherSystem;
 
 [Configurator(SceneEntrypoint.InGame)]
 public class SeasonWeatherSystemConfigurator : IConfigurator

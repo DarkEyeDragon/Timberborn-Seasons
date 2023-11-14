@@ -1,7 +1,6 @@
-﻿using FloodSeason.Seasons;
-using FloodSeason.Seasons.Types;
+﻿using Seasons.Seasons;
 
-namespace FloodSeason.Events;
+namespace Seasons.Events;
 
 public class SeasonChangedEvent
 {

@@ -1,6 +1,5 @@
-﻿using FloodSeason.Growing;
-using FloodSeason.Seasons;
-using FloodSeason.Seasons.Types;
+﻿using Seasons.Growing;
+using Seasons.Seasons;
 using Timberborn.Core;
 using Timberborn.Debugging;
 using Timberborn.Persistence;
@@ -8,7 +7,7 @@ using Timberborn.SingletonSystem;
 using Timberborn.TerrainSystem;
 using Timberborn.TimeSystem;
 
-namespace FloodSeason.WeatherLogic;
+namespace Seasons.WeatherLogic;
 
 public class SeasonWeatherService : ILoadableSingleton
 {
@@ -59,9 +58,10 @@ public class SeasonWeatherService : ILoadableSingleton
             SeasonsPlugin.ConsoleWriter.LogInfo("Pause Growth");
             _plantableService.PauseGrowth();
         }
+
         if (_seasonCycleTrackerService.Day == currentSeason.TotalDays)
         {
-            if (currentSeason.SeasonType.Order == _seasonService.SeasonTypes.Count-1)
+            if (currentSeason.SeasonType.Order == _seasonService.SeasonTypes.Count - 1)
             {
                 _seasonCycleTrackerService.Cycle++;
                 _seasonService.NewCycle();
@@ -70,6 +70,7 @@ public class SeasonWeatherService : ILoadableSingleton
             {
                 _seasonService.NextSeason();
             }
+
             _seasonCycleTrackerService.Day = 1;
         }
         else
@@ -79,7 +80,7 @@ public class SeasonWeatherService : ILoadableSingleton
     }
 
     public ConsoleModuleDefinition GetDefinition() => new ConsoleModuleDefinition.Builder().AddMethod(
-        new ConsoleMethod(
+        ConsoleMethod.Create(
             "Next Season",
             () => { _seasonService.NextSeason(); })
     ).Build();

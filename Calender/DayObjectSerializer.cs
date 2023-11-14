@@ -1,8 +1,8 @@
-﻿using FloodSeason.WeatherLogic.Modifiers;
-using FloodSeason.WeatherLogic.Serializers;
+﻿using Seasons.WeatherLogic.Modifiers;
+using Seasons.WeatherLogic.Serializers;
 using Timberborn.Persistence;
 
-namespace FloodSeason.Calender;
+namespace Seasons.Calender;
 
 public class DayObjectSerializer : IObjectSerializer<Day>
 {

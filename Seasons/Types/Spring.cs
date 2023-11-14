@@ -1,9 +1,9 @@
-﻿using FloodSeason.Seasons.Textures;
-using FloodSeason.WeatherLogic;
-using FloodSeason.WeatherLogic.Modifiers;
+﻿using Seasons.Seasons.Textures;
+using Seasons.WeatherLogic;
+using Seasons.WeatherLogic.Modifiers;
 using Timberborn.Common;
 
-namespace FloodSeason.Seasons.Types;
+namespace Seasons.Seasons.Types;
 
 public class Spring : SeasonType
 {

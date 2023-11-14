@@ -2,7 +2,7 @@
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 
-namespace FloodSeason.NotificationSystem;
+namespace Seasons.NotificationSystem;
 
 [Configurator(SceneEntrypoint.InGame)]
 public class SeasonNotificationSystemConfigurator : IConfigurator

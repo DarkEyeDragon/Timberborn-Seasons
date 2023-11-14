@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using FloodSeason.Calender;
-using FloodSeason.Seasons.Types;
-using FloodSeason.WeatherLogic.Modifiers;
+using Seasons.Calender;
+using Seasons.Seasons.Types;
 
-namespace FloodSeason.Seasons;
+namespace Seasons.Seasons;
 
 public class Season
 {

@@ -1,27 +1,29 @@
-﻿using System;
-using Timberborn.AssetSystem;
+﻿using Timberborn.AssetSystem;
 using Timberborn.CoreUI;
-using Timberborn.GameUI;
 using Timberborn.SingletonSystem;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace FloodSeason.UI;
+namespace Seasons.UI;
 
-public class WeatherForecastPanel: IPanelController, ILoadableSingleton
+public class WeatherForecastPanel : IPanelController, ILoadableSingleton
 {
     private readonly VisualElementInitializer _visualElementInitializer;
     private readonly IResourceAssetLoader _resourceAssetLoader;
+
     private readonly PanelStack _panelStack;
-    private readonly GameLayout _gameLayout;
+
+    //private readonly GameLayout _gameLayout;
     private VisualElement _root;
 
-    public WeatherForecastPanel(VisualElementInitializer visualElementInitializer, IResourceAssetLoader resourceAssetLoader, PanelStack panelStack, GameLayout gameLayout)
+    public WeatherForecastPanel(VisualElementInitializer visualElementInitializer,
+        IResourceAssetLoader resourceAssetLoader, PanelStack panelStack 
+        //GameLayout gameLayout
+    )
     {
         _visualElementInitializer = visualElementInitializer;
         _resourceAssetLoader = resourceAssetLoader;
         _panelStack = panelStack;
-        _gameLayout = gameLayout;
+        //_gameLayout = gameLayout;
     }
 
     public VisualElement GetPanel()
@@ -44,10 +46,11 @@ public class WeatherForecastPanel: IPanelController, ILoadableSingleton
         _gameLayout.AddAbsoluteItem(_root);*/
         //_root.Q<Button>("CancelButton").clicked += OnUICancelled;
     }
-    
+
     private VisualElement LoadVisualElement(string elementName) => LoadVisualElement(LoadVisualTreeAsset(elementName));
 
-    private VisualTreeAsset LoadVisualTreeAsset(string elementName) => _resourceAssetLoader.Load<VisualTreeAsset>( $"{PluginInfo.PLUGIN_GUID}/seasons/{elementName}");
+    private VisualTreeAsset LoadVisualTreeAsset(string elementName) =>
+        _resourceAssetLoader.Load<VisualTreeAsset>($"{PluginInfo.PLUGIN_GUID}/seasons/{elementName}");
 
     private VisualElement LoadVisualElement(VisualTreeAsset visualTreeAsset)
     {

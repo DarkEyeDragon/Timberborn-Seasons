@@ -2,7 +2,7 @@
 using Timberborn.TemplateSystem;
 using Timberborn.WaterSourceSystem;
 
-namespace FloodSeason.Patches;
+namespace Seasons.Patches;
 
 [HarmonyPatch(typeof(WaterSourceSystemConfigurator), nameof(WaterSourceSystemConfigurator.ProvideTemplateModule))]
 public class WaterSourceSystemConfiguratorPatch

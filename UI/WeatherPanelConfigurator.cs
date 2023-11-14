@@ -1,9 +1,8 @@
-﻿using System;
-using Bindito.Core;
+﻿using Bindito.Core;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 
-namespace FloodSeason.UI;
+namespace Seasons.UI;
 [Configurator(SceneEntrypoint.InGame)]
 public class WeatherPanelConfigurator : IConfigurator
 {

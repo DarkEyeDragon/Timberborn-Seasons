@@ -1,34 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
-using FloodSeason.Calender;
-using FloodSeason.Events;
-using FloodSeason.Exceptions;
-using FloodSeason.Extensions;
-using FloodSeason.Seasons.Types;
-using FloodSeason.WeatherLogic;
-using FloodSeason.WeatherLogic.Modifiers;
+using Seasons.Calender;
+using Seasons.Events;
+using Seasons.Exceptions;
+using Seasons.Extensions;
+using Seasons.Seasons.Types;
+using Seasons.WeatherLogic;
+using Seasons.WeatherLogic.Modifiers;
 using Timberborn.Common;
 using Timberborn.Core;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.WeatherSystem;
-using UnityEngine;
 
-namespace FloodSeason.Seasons;
+namespace Seasons.Seasons;
 
 public class SeasonService : ISaveableSingleton, ILoadableSingleton
 {
     private static readonly SingletonKey SeasonServiceKey = new SingletonKey(nameof(SeasonService));
     private static readonly PropertyKey<int> CurrentSeasonKey = new PropertyKey<int>(nameof(CurrentSeason));
-
-    private static readonly int DesertTextureProperty = Shader.PropertyToID("_DesertTex");
     public Season CurrentSeason { get; set; }
     public Season PreviousSeason { get; private set; }
     private readonly ISingletonLoader _singletonLoader;
     private readonly EventBus _eventBus;
     private readonly MapEditorMode _mapEditorMode;
     private readonly IRandomNumberGenerator _randomNumberGenerator;
-    private readonly WeatherDurationService _weatherDurationService;
+    private readonly TemperateWeatherDurationService _weatherDurationService;
     private readonly SeasonCycleTrackerService _seasonCycleTrackerService;
 
     public bool IsActive { get; set; } = false;
@@ -40,7 +37,7 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
     private int _seasonIndex;
 
     public SeasonService(ISingletonLoader singletonLoader, EventBus eventBus, MapEditorMode mapEditorMode,
-        IRandomNumberGenerator randomNumberGenerator, WeatherDurationService weatherDurationService,
+        IRandomNumberGenerator randomNumberGenerator, TemperateWeatherDurationService weatherDurationService,
         SeasonCycleTrackerService seasonCycleTrackerService)
     {
         SeasonTypes = new Dictionary<int, SeasonType>();
@@ -86,11 +83,11 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         }
 
         var seasonType = SeasonTypes[index];
-        var (temperate, drought) = _weatherDurationService.GenerateDurations(_seasonCycleTrackerService.TotalCycles);
+        int duration = _weatherDurationService.GenerateDuration();
         //TODO remove /4
-        var length = seasonType.IsDifficult ? drought : temperate/4;
+        //var length = seasonType.IsDifficult ? drought : temperate/4;
 
-        var forecast = GenerateInitialForecast(seasonType, length);
+        var forecast = GenerateInitialForecast(seasonType, duration);
         PreviousSeason = CurrentSeason;
         CurrentSeason = new Season(_seasonIndex, forecast, seasonType);
         _eventBus.Post(new SeasonChangedEvent(CurrentSeason));
@@ -106,9 +103,9 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
     {
         if (_mapEditorMode.IsMapEditor)
             return;
-        /*IObjectSaver singleton = singletonSaver.GetSingleton(SeasonServiceKey);
-        singleton.Set(CurrentSeasonKey, CurrentSeason.Index);
-        singleton.Set(, CurrentSeason.);*/
+        IObjectSaver singleton = singletonSaver.GetSingleton(SeasonServiceKey);
+        singleton.Set(CurrentSeasonKey, CurrentSeason.SeasonIndex);
+        //singleton.Set(, CurrentSeason.);*/
     }
 
     public void Load()

@@ -1,9 +1,8 @@
 ﻿using Bindito.Core;
-using FloodSeason.Seasons;
 using HarmonyLib;
 using Timberborn.WeatherSystem;
 
-namespace FloodSeason.Patches;
+namespace Seasons.Patches;
 
 [HarmonyPatch(typeof(WeatherSystemConfigurator), nameof(WeatherSystemConfigurator.Configure))]
 
@@ -11,6 +10,6 @@ public class WeatherSystemConfiguratorPatch
 {
     static void Prefix(IContainerDefinition containerDefinition)
     {
-        SeasonsPlugin.ConsoleWriter.LogInfo($"Altering {nameof(WeatherSystemConfiguratorPatch)}...");
+        SeasonsPlugin.ConsoleWriter.LogInfo($"Disabling default {nameof(WeatherSystemConfiguratorPatch)}...");
     }
 }

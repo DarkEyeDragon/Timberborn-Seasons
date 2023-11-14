@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FloodSeason.NotificationSystem;
+namespace Seasons.NotificationSystem;
 
 public class CustomNotification
 {

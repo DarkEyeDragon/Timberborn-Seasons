@@ -1,8 +1,9 @@
 ﻿using Bindito.Core;
-using FloodSeason.WaterLogic;
+using Seasons.WaterLogic;
 using Timberborn.TemplateSystem;
 using Timberborn.WaterSourceSystem;
-namespace FloodSeason.Seasons;
+
+namespace Seasons.Seasons;
 
 public class SeasonTemplateModuleProvider : IProvider<TemplateModule>
 {

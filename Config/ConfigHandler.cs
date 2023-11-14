@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace FloodSeason.Config;
+namespace Seasons.Config;
 
 public class ConfigHandler
 {

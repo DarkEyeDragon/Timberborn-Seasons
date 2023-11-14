@@ -1,11 +1,10 @@
-﻿using FloodSeason.WeatherLogic.Modifiers;
-using Timberborn.Core;
+﻿using Timberborn.Core;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
 
-namespace FloodSeason.WeatherLogic;
+namespace Seasons.WeatherLogic;
 
 public class SeasonCycleTrackerService : ISaveableSingleton, ILoadableSingleton
 {
@@ -21,7 +20,7 @@ public class SeasonCycleTrackerService : ISaveableSingleton, ILoadableSingleton
     public int Cycle { get; set; }
     public int TotalCycles => _dayNightCycle.DayNumber;
 
-    public SeasonCycleTrackerService(WeatherDurationService weatherDurationService, MapEditorMode _mapEditorMode,
+    public SeasonCycleTrackerService(TemperateWeatherDurationService weatherDurationService, MapEditorMode _mapEditorMode,
         ISingletonLoader singletonLoader, IDayNightCycle dayNightCycle)
     {
         this._mapEditorMode = _mapEditorMode;

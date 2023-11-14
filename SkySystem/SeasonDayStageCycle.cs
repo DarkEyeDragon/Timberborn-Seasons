@@ -1,11 +1,10 @@
 ﻿using Bindito.Core;
-using FloodSeason.Seasons;
-using FloodSeason.WeatherLogic;
+using Seasons.Seasons;
 using Timberborn.SkySystem;
 using Timberborn.TimeSystem;
 using UnityEngine;
 
-namespace FloodSeason.SkySystem;
+namespace Seasons.SkySystem;
 
 public class SeasonDayStageCycle : DayStageCycle
 {

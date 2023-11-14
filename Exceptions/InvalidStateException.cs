@@ -1,6 +1,6 @@
 using System;
 
-namespace FloodSeason.Exceptions;
+namespace Seasons.Exceptions;
 
 public class InvalidStateException : Exception
 {

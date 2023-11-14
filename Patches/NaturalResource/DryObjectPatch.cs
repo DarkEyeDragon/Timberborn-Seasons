@@ -1,9 +1,6 @@
-﻿using FloodSeason.Seasons;
-using FloodSeason.Seasons.Types;
-using HarmonyLib;
-using Timberborn.SoilMoistureSystem;
+﻿using HarmonyLib;
 
-namespace FloodSeason.Patches.NaturalResource;
+namespace Seasons.Patches.NaturalResource;
 
 [HarmonyPatch]
 public class DryObjectPatch

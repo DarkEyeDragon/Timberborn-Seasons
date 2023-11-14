@@ -1,19 +1,17 @@
 ﻿using System;
-using FloodSeason.Seasons;
-using FloodSeason.WeatherLogic;
+using Seasons.Seasons;
+using Seasons.WeatherLogic;
 using Timberborn.CoreUI;
 using Timberborn.GameSound;
-using Timberborn.GameUI;
 using Timberborn.Localization;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
+using Timberborn.TooltipSystem;
 using Timberborn.WeatherSystem;
-using Timberborn.WeatherSystemUI;
-using Timberborn.WellbeingUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace FloodSeason.UI;
+namespace Seasons.UI;
 
 public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
 {
@@ -31,7 +29,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
     private static readonly string AutumnClass = "weather-panel--autumn";
     private static readonly string WinterClass = "weather-panel--winter";
     private static readonly string DryIncomingClass = "weather-panel--dry-incoming";
-    private readonly GameLayout _gameLayout;
+    //private readonly GameLayout _gameLayout;
     private readonly VisualElementLoader _visualElementLoader;
     private readonly SeasonService _seasonService;
     private readonly WeatherService _weatherService;
@@ -54,7 +52,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
     private bool _initialBlink;
 
     public SeasonWeatherPanel(
-        GameLayout gameLayout,
+        //GameLayout gameLayout,
         VisualElementLoader visualElementLoader,
         SeasonService seasonService,
         WeatherService weatherService,
@@ -64,7 +62,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
         PanelStack panelStack,
         IDayNightCycle dayNightCycle, SeasonCycleTrackerService seasonCycleTrackerService)
     {
-        _gameLayout = gameLayout;
+        //_gameLayout = gameLayout;
         _visualElementLoader = visualElementLoader;
         _seasonService = seasonService;
         _weatherService = weatherService;
@@ -83,7 +81,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
         _progress = _root.Q<Timberborn.CoreUI.ProgressBar>("Progress");
         _forecastCounter = _root.Q<Label>("ForecastCounter");
         _forecastIcon = _root.Q<VisualElement>("ForecastIcon");
-        _gameLayout.AddTopRight(_root, 6);
+        //_gameLayout.AddTopRight(_root, 6);
         UpdatePanel(true);
         _pausedUntilTimeUnpaused = true;
     }

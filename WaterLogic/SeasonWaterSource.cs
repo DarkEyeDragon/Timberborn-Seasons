@@ -1,6 +1,4 @@
-﻿using Timberborn.WaterSourceSystem;
-
-namespace FloodSeason.WaterLogic;
+﻿namespace Seasons.WaterLogic;
 
 /*public class SeasonWaterSource : WaterSource
 {

@@ -1,11 +1,9 @@
 ﻿using Bindito.Core;
-using FloodSeason.Events;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
-using Timberborn.NotificationSystem;
 using Timberborn.TemplateSystem;
 
-namespace FloodSeason.Seasons;
+namespace Seasons.Seasons;
 
 [Configurator(SceneEntrypoint.InGame)]
 public class SeasonConfigurator : IConfigurator

@@ -1,15 +1,15 @@
 ﻿using System;
 using Bindito.Core;
-using FloodSeason.Calender;
-using FloodSeason.Seasons;
-using FloodSeason.WeatherLogic;
+using Seasons.Calender;
+using Seasons.Seasons;
+using Seasons.WeatherLogic;
 using Timberborn.TickSystem;
 using Timberborn.TimeSystem;
 using Timberborn.WaterSourceSystem;
 using Timberborn.WaterSystem;
 using UnityEngine;
 
-namespace FloodSeason.WaterLogic;
+namespace Seasons.WaterLogic;
 
 public class SeasonWaterSourceController : TickableComponent
 {
@@ -36,7 +36,7 @@ public class SeasonWaterSourceController : TickableComponent
 
     public void Awake()
     {
-        _waterSource = GetComponent<WaterSource>();
+        _waterSource = GetComponentFast<WaterSource>();
     }
 
     public override void Tick()
@@ -68,10 +68,11 @@ public class SeasonWaterSourceController : TickableComponent
         float currentStrength = _waterSource.CurrentStrength;
         var currentWeather = _seasonService;
         //if(_weatherService.CurrentWeather.ActiveEvent)
-        float targetStrength = _waterSource.SpecifiedStrength * currentWeather.CurrentSeason.CurrentDay.Modifier.Multiplier;
+        float targetStrength =
+            _waterSource.SpecifiedStrength * currentWeather.CurrentSeason.CurrentDay.Modifier.Multiplier;
         if (Math.Abs(currentStrength - targetStrength) < 0.00001)
             return;
-        _waterSource.CurrentStrength = CalculateNewStrength(currentStrength, targetStrength);
+        _waterSource.SetCurrentStrength(CalculateNewStrength(currentStrength, targetStrength));
     }
 
     private float CalculateNewStrength(float currentStrength, float targetStrength)
@@ -93,6 +94,7 @@ public class SeasonWaterSourceController : TickableComponent
                 var passedDays = _seasonService.PreviousSeason.PassedDays;
                 previousDay = passedDays[^2];
             }
+
             if (currentDay.Modifier.WeatherType == WeatherType.Flood ||
                 previousDay.Modifier.WeatherType == WeatherType.Flood)
             {

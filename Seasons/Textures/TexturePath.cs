@@ -1,4 +1,4 @@
-﻿namespace FloodSeason.Seasons.Textures;
+﻿namespace Seasons.Seasons.Textures;
 
 public class TexturePath
 {

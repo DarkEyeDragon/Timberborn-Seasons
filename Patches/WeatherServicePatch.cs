@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Timberborn.WeatherSystem;
 
-namespace FloodSeason.Patches;
+namespace Seasons.Patches;
 
 [HarmonyPatch]
 public class WeatherServicePatch

@@ -1,8 +1,6 @@
-﻿
-using FloodSeason.WeatherLogic;
-using FloodSeason.WeatherLogic.Modifiers;
+﻿using Seasons.WeatherLogic.Modifiers;
 
-namespace FloodSeason.Calender;
+namespace Seasons.Calender;
 
 public class Day
 {

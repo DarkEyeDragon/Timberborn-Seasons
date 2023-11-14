@@ -1,4 +1,4 @@
-﻿namespace FloodSeason.NotificationSystem;
+﻿namespace Seasons.NotificationSystem;
 
 public class CustomNotificationEventArgs
 {

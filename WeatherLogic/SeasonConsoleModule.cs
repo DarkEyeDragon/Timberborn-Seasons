@@ -1,7 +1,7 @@
-﻿using FloodSeason.Seasons;
+﻿using Seasons.Seasons;
 using Timberborn.Debugging;
 
-namespace FloodSeason.WeatherLogic;
+namespace Seasons.WeatherLogic;
 
 public class SeasonConsoleModule : IConsoleModule
 {
@@ -13,7 +13,7 @@ public class SeasonConsoleModule : IConsoleModule
     }
 
     public ConsoleModuleDefinition GetDefinition() => new ConsoleModuleDefinition.Builder().AddMethod(
-        new ConsoleMethod(
+        ConsoleMethod.Create(
             "Cycle Season",
             () => { _seasonService.NextSeason(); })
     ).Build();

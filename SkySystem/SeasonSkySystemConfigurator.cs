@@ -3,7 +3,7 @@ using Bindito.Unity;
 using Timberborn.Debugging;
 using Timberborn.SkySystem;
 
-namespace FloodSeason.SkySystem;
+namespace Seasons.SkySystem;
 
 public class SeasonSkySystemConfigurator : PrefabConfigurator
 {

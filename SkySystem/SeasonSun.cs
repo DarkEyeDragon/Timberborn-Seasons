@@ -1,10 +1,8 @@
 ﻿using Bindito.Core;
 using Timberborn.CameraSystem;
-using Timberborn.SingletonSystem;
 using Timberborn.SkySystem;
-using UnityEngine;
 
-namespace FloodSeason.SkySystem;
+namespace Seasons.SkySystem;
 
 public class SeasonSun : Sun
 {
