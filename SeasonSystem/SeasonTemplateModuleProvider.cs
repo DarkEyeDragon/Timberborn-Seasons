@@ -3,7 +3,7 @@ using Seasons.WaterLogic;
 using Timberborn.TemplateSystem;
 using Timberborn.WaterSourceSystem;
 
-namespace Seasons.Seasons;
+namespace Seasons.SeasonSystem;
 
 public class SeasonTemplateModuleProvider : IProvider<TemplateModule>
 {

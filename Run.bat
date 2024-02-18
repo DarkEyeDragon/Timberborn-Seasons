@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Steam\steam.exe" -applaunch 1062090 --doorstop-enable true --doorstop-target "E:\Games\steamapps\common\Timberborn\BepInEx\core\BepInEx.Preloader.dll"

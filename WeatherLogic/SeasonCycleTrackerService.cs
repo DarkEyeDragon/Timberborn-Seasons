@@ -1,4 +1,5 @@
-﻿using Timberborn.Core;
+﻿using Seasons.Events;
+using Timberborn.Core;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.TimeSystem;
@@ -19,6 +20,13 @@ public class SeasonCycleTrackerService : ISaveableSingleton, ILoadableSingleton
     public int Day { get; set; }
     public int Cycle { get; set; }
     public int TotalCycles => _dayNightCycle.DayNumber;
+
+    [OnEvent]
+    public void OnSeasonChanged(SeasonChangedEvent seasonChangedEvent)
+    {
+        Day = 1;
+        Cycle++;
+    }
 
     public SeasonCycleTrackerService(TemperateWeatherDurationService weatherDurationService, MapEditorMode _mapEditorMode,
         ISingletonLoader singletonLoader, IDayNightCycle dayNightCycle)

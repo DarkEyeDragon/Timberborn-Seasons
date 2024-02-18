@@ -9,15 +9,16 @@ namespace Seasons
     public class SeasonsPlugin : IModEntrypoint
     {
         public static SeasonConfig Config;
-        
+
         public const string PluginGuid = "me.darkeyedragon.seasons";
         public const string PluginName = "Seasons";
-        
+
         public static IConsoleWriter ConsoleWriter;
+
         public void Entry(IMod mod, IConsoleWriter consoleWriter)
         {
-            /*ConsoleWriter = consoleWriter;
-            consoleWriter.LogInfo($"Loaded {PluginName} Code Entry Point...");*/
+            ConsoleWriter = consoleWriter;
+            consoleWriter.LogInfo($"Loaded {PluginName} for Timberborn {TimberApi.Versions.GameVersion}");
             new Harmony(PluginGuid).PatchAll();
         }
     }

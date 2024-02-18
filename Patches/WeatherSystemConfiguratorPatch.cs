@@ -10,6 +10,6 @@ public class WeatherSystemConfiguratorPatch
 {
     static void Prefix(IContainerDefinition containerDefinition)
     {
-        SeasonsPlugin.ConsoleWriter.LogInfo($"Disabling default {nameof(WeatherSystemConfiguratorPatch)}...");
+        SeasonsPlugin.ConsoleWriter.LogInfo($"Disabling default {nameof(WeatherSystemConfigurator)}...");
     }
 }

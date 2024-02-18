@@ -12,10 +12,10 @@ public class DayStageCyclePatch
         DayStage nextDayStage,
         float hoursToNextDayStage, ref DayStageTransition __result, DayStageCycle __instance)
     {
-        var seasonService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonService>();
-        float transitionProgress = Mathf.SmoothStep(0.0f, 1f, 1f - Mathf.Clamp01(hoursToNextDayStage / __instance._transitionLengthInHours));
+        //var seasonService = TimberApi.DependencyContainerSystem.DependencyContainer.GetInstance<SeasonService>();
+        //float transitionProgress = Mathf.SmoothStep(0.0f, 1f, 1f - Mathf.Clamp01(hoursToNextDayStage / __instance._transitionLengthInHours));
         //TODO rework
-        bool isDrought = seasonService.CurrentSeason.SeasonType.Name.Equals("Summer");
-        __result = new DayStageTransition(currentDayStage, isDrought, nextDayStage, false, transitionProgress);
+        //bool isDrought = seasonService.CurrentSeason.SeasonType.Name.Equals("Summer");
+        //__result = new DayStageTransition(currentDayStage, isDrought, nextDayStage, false, transitionProgress);
     }
 }

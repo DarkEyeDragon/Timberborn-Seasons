@@ -5,20 +5,23 @@ using Seasons.Events;
 using Seasons.Exceptions;
 using Seasons.Extensions;
 using Seasons.Seasons.Types;
+using Seasons.SeasonSystem.Types;
 using Seasons.WeatherLogic;
 using Seasons.WeatherLogic.Modifiers;
 using Timberborn.Common;
 using Timberborn.Core;
+using Timberborn.HazardousWeatherSystem;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
+using Timberborn.TimeSystem;
 using Timberborn.WeatherSystem;
 
-namespace Seasons.Seasons;
+namespace Seasons.SeasonSystem;
 
 public class SeasonService : ISaveableSingleton, ILoadableSingleton
 {
     private static readonly SingletonKey SeasonServiceKey = new SingletonKey(nameof(SeasonService));
-    private static readonly PropertyKey<int> CurrentSeasonKey = new PropertyKey<int>(nameof(CurrentSeason));
+    private static readonly PropertyKey<Season> CurrentSeasonKey = new PropertyKey<Season>(nameof(CurrentSeason));
     public Season CurrentSeason { get; set; }
     public Season PreviousSeason { get; private set; }
     private readonly ISingletonLoader _singletonLoader;
@@ -35,6 +38,13 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
     //public List<Season> Seasons => _seasons.ToList();
     //private Texture _defaultTexture;
     private int _seasonIndex;
+
+    [OnEvent]
+    public void OnDaytimeStart(DaytimeStartEvent daytimeStartEvent)
+    {
+        NextDay();
+    }
+
 
     public SeasonService(ISingletonLoader singletonLoader, EventBus eventBus, MapEditorMode mapEditorMode,
         IRandomNumberGenerator randomNumberGenerator, TemperateWeatherDurationService weatherDurationService,
@@ -74,26 +84,38 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         SeasonTypes.Remove(seasonType.Order);
     }
 
+    
+    
     public void NextSeason()
     {
         var index = _seasonIndex++;
         if (index >= SeasonTypes.Count || index < 0)
         {
-            throw new InvalidStateException($"Attempting to load season out of index ({index})");
+            throw new InvalidStateException(
+                $"Attempting to load season out of index ({index}) Max {SeasonTypes.Count}");
         }
 
         var seasonType = SeasonTypes[index];
         int duration = _weatherDurationService.GenerateDuration();
+        SeasonsPlugin.ConsoleWriter.LogInfo($"SeasonTypes: {SeasonTypes.Count}");
+        SeasonsPlugin.ConsoleWriter.LogInfo($"Duration: {duration}");
         //TODO remove /4
         //var length = seasonType.IsDifficult ? drought : temperate/4;
 
         var forecast = GenerateInitialForecast(seasonType, duration);
+        
+        //TODO improve system
+        SeasonsPlugin.ConsoleWriter.LogInfo($"Forecast size: {forecast.Count}");
         PreviousSeason = CurrentSeason;
-        CurrentSeason = new Season(_seasonIndex, forecast, seasonType);
+        CurrentSeason = new Season(SeasonTypes[index]);
+        SeasonsPlugin.ConsoleWriter.LogInfo($"Current Season: {CurrentSeason.SeasonType.Name}");
+        CurrentSeason.SetForecast(forecast);
+        //CurrentSeason =  SeasonTypes[index];
         _eventBus.Post(new SeasonChangedEvent(CurrentSeason));
+        //_eventBus.Post(new HazardousWeatherStartedEvent(new BadtideWeather()));
     }
 
-    public void NewCycle()
+    public void NewYear()
     {
         _seasonIndex = 0;
         NextSeason();
@@ -104,7 +126,7 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         if (_mapEditorMode.IsMapEditor)
             return;
         IObjectSaver singleton = singletonSaver.GetSingleton(SeasonServiceKey);
-        singleton.Set(CurrentSeasonKey, CurrentSeason.SeasonIndex);
+        singleton.Set(CurrentSeasonKey, CurrentSeason, new SeasonObjectSerializer());
         //singleton.Set(, CurrentSeason.);*/
     }
 
@@ -113,22 +135,31 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         if (!_singletonLoader.HasSingleton(SeasonServiceKey))
         {
             NextSeason();
-            return;
         }
-
-        /*CurrentSeason = _seasons.Find(season =>
-            season.Index.Equals(_singletonLoader.GetSingleton(SeasonServiceKey).Get(CurrentSeasonKey)));
-        while (CurrentSeason != _enumerator.Current)
+        else
         {
-            _enumerator.MoveNext();
+            _singletonLoader.GetSingleton(SeasonServiceKey).Get(CurrentSeasonKey, new SeasonObjectSerializer());
         }
-
-        Update(CurrentSeason);*/
+        _eventBus.Register(this);
     }
 
     public void NextDay()
     {
-        CurrentSeason.NextDay();
+        if (CurrentSeason.RemainingDays.Count > 0)
+        {
+            CurrentSeason.NextDay();
+        }
+        else
+        {
+            if (CurrentSeason.SeasonType.Order != SeasonTypes.Count - 1)
+            {
+                NextSeason();
+            }
+            else
+            {
+                NewYear();
+            }
+        }
     }
 
     private Day GenerateNextForecastDay(SeasonType seasonType)
@@ -147,6 +178,7 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
                 }
             }
         }
+
         return new Day
         {
             Temperature = _randomNumberGenerator.Range(seasonType.TemperatureRange),
@@ -161,6 +193,7 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         {
             queue.Enqueue(GenerateNextForecastDay(seasonType));
         }
+
         return queue;
     }
 }

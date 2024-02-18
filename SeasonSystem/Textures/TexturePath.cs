@@ -1,4 +1,4 @@
-﻿namespace Seasons.Seasons.Textures;
+﻿namespace Seasons.SeasonSystem.Textures;
 
 public class TexturePath
 {
@@ -9,7 +9,7 @@ public class TexturePath
 public static class TexturePathTypes
 {
     private static readonly string Base = $"{PluginInfo.PLUGIN_GUID}";
-    private static readonly string Season = $"{Base}/seasons";
+    public static readonly string Season = $"{Base}/seasons";
     public static class Terrain
     {
         public static readonly string Desert = $"{Season}/Desert-";

@@ -1,6 +1,6 @@
 ﻿using Timberborn.Persistence;
 
-namespace Seasons.Seasons;
+namespace Seasons.SeasonSystem;
 
 public class SeasonObjectSerializer : IObjectSerializer<Season>
 {

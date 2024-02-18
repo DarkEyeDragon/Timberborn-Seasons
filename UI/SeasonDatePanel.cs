@@ -1,68 +1,122 @@
 ﻿using Seasons.Seasons;
+using Seasons.SeasonSystem;
 using Seasons.Temperature;
 using Seasons.WeatherLogic;
 using Timberborn.CoreUI;
+using Timberborn.HazardousWeatherSystem;
+using Timberborn.HazardousWeatherSystemUI;
 using Timberborn.Localization;
 using Timberborn.SingletonSystem;
+using Timberborn.TimeSystem;
 using Timberborn.TooltipSystem;
 using Timberborn.UIFormatters;
+using Timberborn.UILayoutSystem;
+using Timberborn.WeatherSystem;
 using UnityEngine.UIElements;
 
 namespace Seasons.UI;
 
-public class SeasonDatePanel : ILoadableSingleton, IUpdatableSingleton
+public class SeasonDatePanel : ILoadableSingleton
 {
-    //TODO GameLayout
-    private static readonly string WeatherDroughtLocKey = "Weather.Drought";
     private static readonly string WeatherTemperateLocKey = "Weather.Temperate";
-    //private readonly GameLayout _gameLayout;
+
+    private readonly UILayout _uiLayout;
+
     private readonly VisualElementLoader _visualElementLoader;
+
+    private readonly WeatherService _weatherService;
     private readonly SeasonCycleTrackerService _seasonCycleTrackerService;
+
     private readonly TimestampFormatter _timestampFormatter;
-    private readonly SeasonService _seasonService;
+
     private readonly ILoc _loc;
+
     private readonly ITooltipRegistrar _tooltipRegistrar;
-    private readonly TemperatureService _temperatureService;
+
+    private readonly EventBus _eventBus;
+    private readonly SeasonService _seasonService;
+
+    private readonly HazardousWeatherUIHelper _hazardousWeatherUIHelper;
+
     private VisualElement _root;
+
     private Label _text;
+
     private string _tooltipText;
 
-    public SeasonDatePanel(
-        //GameLayout gameLayout,
-        VisualElementLoader visualElementLoader,
-        SeasonCycleTrackerService seasonCycleTrackerService,
-        TimestampFormatter timestampFormatter,
-        SeasonService seasonService,
-        ILoc loc,
-        ITooltipRegistrar tooltipRegistrar,
-        TemperatureService temperatureService)
+    private string _currentIconClass;
+
+    public SeasonDatePanel(UILayout uiLayout, VisualElementLoader visualElementLoader, WeatherService weatherService, SeasonCycleTrackerService seasonCycleTrackerService,
+        TimestampFormatter timestampFormatter, ILoc loc, ITooltipRegistrar tooltipRegistrar, EventBus eventBus, SeasonService seasonService,
+        HazardousWeatherUIHelper hazardousWeatherUIHelper)
     {
-        //_gameLayout = gameLayout;
+        _uiLayout = uiLayout;
         _visualElementLoader = visualElementLoader;
+        _weatherService = weatherService;
         _seasonCycleTrackerService = seasonCycleTrackerService;
         _timestampFormatter = timestampFormatter;
-        _seasonService = seasonService;
         _loc = loc;
         _tooltipRegistrar = tooltipRegistrar;
-        _temperatureService = temperatureService;
+        _eventBus = eventBus;
+        _seasonService = seasonService;
+        _hazardousWeatherUIHelper = hazardousWeatherUIHelper;
     }
 
     public void Load()
     {
-        _root = _visualElementLoader.LoadVisualElement("Master/DatePanel");
+        _eventBus.Register(this);
+        _root = _visualElementLoader.LoadVisualElement("Game/DatePanel");
         _tooltipRegistrar.Register(_root, () => _tooltipText);
         _text = _root.Q<Label>("Text");
-        //_gameLayout.AddTopRight(_root, 5);
+        _uiLayout.AddTopRight(_root, 5);
         UpdatePanel();
     }
 
-    public void UpdateSingleton() => UpdatePanel();
-    
+    [OnEvent]
+    public void OnHazardousWeatherStartedEvent(HazardousWeatherStartedEvent hazardousWeatherStartedEvent)
+    {
+        UpdatePanel();
+    }
+
+    [OnEvent]
+    public void OnHazardousWeatherEndedEvent(HazardousWeatherEndedEvent hazardousWeatherEndedEvent)
+    {
+        UpdatePanel();
+    }
+
+    [OnEvent]
+    public void OnDaytimeStart(DaytimeStartEvent daytimeStartEvent)
+    {
+        UpdatePanel();
+    }
+
     private void UpdatePanel()
     {
-        //_root.EnableInClassList(DroughtClass, _droughtService.IsDrought);
-        var seasonName = _seasonService.CurrentSeason.SeasonType.Name;
-        _text.text = $"{seasonName} {_seasonCycleTrackerService.Day} {_loc.T("seasons.cycle")} {_seasonCycleTrackerService.Cycle} ({_temperatureService.CurrentTemperature:F1}°C)";
-        //_tooltipText = $"{_loc.T("seasons.month")}/{_loc.T("seasons.year")}";
+        UpdateIcon();
+        UpdateText();
+    }
+
+    private void UpdateIcon()
+    {
+        if (!string.IsNullOrEmpty(_currentIconClass))
+        {
+            _root.RemoveFromClassList(_currentIconClass);
+            _currentIconClass = null;
+        }
+
+        if (_weatherService.IsHazardousWeather)
+        {
+            _currentIconClass = _hazardousWeatherUIHelper.IconClass;
+            _root.AddToClassList(_currentIconClass);
+        }
+    }
+
+    private void UpdateText()
+    {
+        _text.text = _timestampFormatter.FormatLongLocalized(_seasonCycleTrackerService.Cycle, _seasonCycleTrackerService.Day);
+        _tooltipText = _seasonService.CurrentSeason.SeasonType.Name;
+        /*_tooltipText = _loc.T(_weatherService.IsHazardousWeather
+            ? _hazardousWeatherUIHelper.NameLocKey
+            : WeatherTemperateLocKey);*/
     }
 }

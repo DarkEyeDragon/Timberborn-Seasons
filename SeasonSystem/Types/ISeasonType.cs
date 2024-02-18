@@ -1,4 +1,4 @@
-﻿using Seasons.Seasons.Textures;
+﻿using Seasons.SeasonSystem.Textures;
 
 namespace Seasons.Seasons.Types;
 

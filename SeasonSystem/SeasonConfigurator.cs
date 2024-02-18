@@ -3,7 +3,7 @@ using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 using Timberborn.TemplateSystem;
 
-namespace Seasons.Seasons;
+namespace Seasons.SeasonSystem;
 
 [Configurator(SceneEntrypoint.InGame)]
 public class SeasonConfigurator : IConfigurator

@@ -1,0 +1,11 @@
+ID,Text,Comment
+seasons.growable.paused,It's freezing and will die in {0} days.
+seasons.day,day
+seasons.cycle,cycle
+seasons.year,year
+seasons.month,month
+Seasons.Notifications.Title,{0}
+Seasons.Notifications.Approaching,{0} is approaching
+Seasons.Notifications.InProgress,{0} is currently in progress
+Seasons.Notifications.Started,{0} has started
+Seasons.Notifications.Ended,{0} has ended

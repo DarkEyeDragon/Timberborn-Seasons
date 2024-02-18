@@ -1,0 +1,7 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Build + Run" type="CompoundRunConfigurationType">
+    <toRun name="Build + Copy" type="ShConfigurationType" />
+    <toRun name="Launch game" type="ShConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

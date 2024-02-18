@@ -1,5 +1,7 @@
 ﻿using Seasons.Events;
 using Seasons.Seasons;
+using Seasons.SeasonSystem;
+using Seasons.SeasonSystem.Textures;
 using Timberborn.AssetSystem;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
@@ -62,32 +64,30 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
 
     private void UpdateTerrainMesh(Season season)
     {
-        
         foreach (var (key, value) in _terrainMeshManager._tiles)
         {
             var renderer = value.GetComponent<MeshRenderer>();
             var materials = renderer.materials;
             foreach (var material in materials)
             {
-                if (material.name.StartsWith("Grass") || material.name.StartsWith("CliffEdge"))
+                if (!material.name.StartsWith("Grass") && !material.name.StartsWith("CliffEdge")) continue;
+                
+                if (SeasonTexture == null)
                 {
-                    if (SeasonTexture == null)
-                    {
-                        SeasonTexture = material.GetTexture(BaseAlbedoTex);
-                    }
+                    SeasonTexture = material.GetTexture(BaseAlbedoTex);
+                }
 
-                    if (season.SeasonType.TexturePath?.PathGrass is null)
-                    {
-                        material.SetTexture(BaseAlbedoTex, SeasonTexture);
-                    }
-                    else
-                    {
-                        _seasonTexturePath = season.SeasonType.TexturePath.PathGrass;
-                        material.SetTexture(BaseAlbedoTex,
-                            _resourceAssetLoader
-                                .Load<Material>(_seasonTexturePath)
-                                .mainTexture);
-                    }
+                if (season.SeasonType.TexturePath?.PathGrass is null)
+                {
+                    material.SetTexture(BaseAlbedoTex, SeasonTexture);
+                }
+                else
+                {
+                    _seasonTexturePath = season.SeasonType.TexturePath.PathGrass;
+                    material.SetTexture(BaseAlbedoTex,
+                        _resourceAssetLoader
+                            .Load<Material>(_seasonTexturePath)
+                            .mainTexture);
                 }
             }
         }

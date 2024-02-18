@@ -1,4 +1,7 @@
 ﻿using HarmonyLib;
+using Seasons.WeatherSystem;
+using TimberApi.DependencyContainerSystem;
+using Timberborn.HazardousWeatherSystem;
 using Timberborn.WeatherSystem;
 
 namespace Seasons.Patches;
@@ -17,6 +20,8 @@ public class WeatherServicePatch
     [HarmonyPatch(typeof(WeatherService), nameof(WeatherService.StartNextCycle))]
     static bool StartNextCycle()
     {
+        int cycle = DependencyContainer.GetInstance<WeatherService>().Cycle;
+        DependencyContainer.GetInstance<HazardousWeatherService>().SetForCycle(cycle);
         return false;
     }
 }

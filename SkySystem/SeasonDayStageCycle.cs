@@ -8,7 +8,7 @@ namespace Seasons.SkySystem;
 
 public class SeasonDayStageCycle : DayStageCycle
 {
-    private SeasonService _seasonService;
+    /*private SeasonService _seasonService;
 
     [Inject]
     public void InjectDependencies(
@@ -49,5 +49,5 @@ public class SeasonDayStageCycle : DayStageCycle
         //TODO implement transition for each season
         //bool nextDayStageIsInDrought = nextDayStage == DayStage.Sunrise ? _weatherService.NextDayIsInDrought() : isDrought;
         return new DayStageTransition(currentDayStage, isDrought, nextDayStage, false, transitionProgress);
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Seasons.Seasons;
+using Seasons.SeasonSystem;
 using Seasons.WeatherLogic;
 using Timberborn.CoreUI;
 using Timberborn.GameSound;
@@ -76,7 +77,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
 
     public void Load()
     {
-        _root = _visualElementLoader.LoadVisualElement("Master/WeatherPanel");
+        _root = _visualElementLoader.LoadVisualElement("Game/WeatherPanel");
         _tooltipRegistrar.Register(_root, () => _tooltipText);
         _progress = _root.Q<Timberborn.CoreUI.ProgressBar>("Progress");
         _forecastCounter = _root.Q<Label>("ForecastCounter");
@@ -97,7 +98,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
 
     private void UpdatePanel(bool blockBlinking)
     {
-        int remainingDays = _seasonService.CurrentSeason.RemainingDays.Count - 1;
+        /*int remainingDays = _seasonService.CurrentSeason.RemainingDays.Count - 1;
         float partialCycleDay = _weatherService.PartialCycleDay;
         if (_seasonService.CurrentSeason.SeasonType.IsDifficult)
         {
@@ -116,7 +117,7 @@ public class SeasonWeatherPanel : ILoadableSingleton, IUpdatableSingleton
             SetPanelContent(_loc.T(UnknownLocKey), 0.0f, 0.0f);
             _root.RemoveFromClassList(DryClass);
             _initialBlink = true;
-        }
+        }*/
     }
 
     private void SetPanelContent(

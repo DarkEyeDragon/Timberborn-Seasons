@@ -1,4 +1,5 @@
 ﻿using Seasons.Seasons;
+using Seasons.SeasonSystem;
 using Timberborn.Debugging;
 
 namespace Seasons.WeatherLogic;
@@ -14,7 +15,17 @@ public class SeasonConsoleModule : IConsoleModule
 
     public ConsoleModuleDefinition GetDefinition() => new ConsoleModuleDefinition.Builder().AddMethod(
         ConsoleMethod.Create(
-            "Cycle Season",
-            () => { _seasonService.NextSeason(); })
+            "Seasons: Next Season",
+            () =>
+            {
+                if (_seasonService.CurrentSeason.SeasonType.Order != _seasonService.SeasonTypes.Count - 1)
+                {
+                    _seasonService.NextSeason();
+                }
+                else
+                {
+                    _seasonService.NewYear();
+                }
+            })
     ).Build();
 }

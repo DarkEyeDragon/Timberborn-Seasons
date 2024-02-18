@@ -1,5 +1,6 @@
 ﻿using System;
 using Seasons.Seasons;
+using Seasons.SeasonSystem;
 using Timberborn.Persistence;
 using Timberborn.SingletonSystem;
 using Timberborn.TickSystem;
@@ -45,7 +46,8 @@ public class TemperatureService : ITickableSingleton, ILoadableSingleton, ISavea
         if (_index++ >= MaxTicks)
         {
             _index = 0;
-            CalculateCurrentTemperature();
+            //TODO find better solution
+            //CalculateCurrentTemperature();
         }
     }
 
@@ -57,7 +59,7 @@ public class TemperatureService : ITickableSingleton, ILoadableSingleton, ISavea
         }
         else
         {
-            CalculateCurrentTemperature();
+            //CalculateCurrentTemperature();
         }
     }
 

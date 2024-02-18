@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Seasons.Seasons.Types;
+using Seasons.SeasonSystem.Types;
 
 namespace Seasons.Config;
 

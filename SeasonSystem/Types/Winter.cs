@@ -1,4 +1,5 @@
-﻿using Seasons.WeatherLogic;
+﻿using Seasons.SeasonSystem.Types;
+using Seasons.WeatherLogic;
 using Seasons.WeatherLogic.Modifiers;
 using Timberborn.Common;
 

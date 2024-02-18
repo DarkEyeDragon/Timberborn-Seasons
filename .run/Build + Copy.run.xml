@@ -1,6 +1,6 @@
 ﻿<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Build + Copy" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="Xcopy Seasons.dll E:\Games\steamapps\common\Timberborn\BepInEx\plugins\Seasons\Seasons.dll /R /Y; exit" />
+    <option name="SCRIPT_TEXT" value="Xcopy Seasons.dll E:\Games\steamapps\common\Timberborn\BepInEx\plugins\Seasons\Seasons.dll /R /Y; Xcopy Lang E:\Games\steamapps\common\Timberborn\BepInEx\plugins\Seasons\Lang /R /Y; exit" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
