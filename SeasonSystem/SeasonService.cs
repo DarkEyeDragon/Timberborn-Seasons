@@ -28,8 +28,9 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
     private readonly EventBus _eventBus;
     private readonly MapEditorMode _mapEditorMode;
     private readonly IRandomNumberGenerator _randomNumberGenerator;
-    private readonly TemperateWeatherDurationService _weatherDurationService;
+    private readonly TemperateWeatherDurationService _temperateWeatherDurationService;
     private readonly SeasonCycleTrackerService _seasonCycleTrackerService;
+    private readonly DroughtWeather _droughtWeather;
 
     public bool IsActive { get; set; } = false;
     public Dictionary<int, SeasonType> SeasonTypes { get; private set; }
@@ -47,8 +48,8 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
 
 
     public SeasonService(ISingletonLoader singletonLoader, EventBus eventBus, MapEditorMode mapEditorMode,
-        IRandomNumberGenerator randomNumberGenerator, TemperateWeatherDurationService weatherDurationService,
-        SeasonCycleTrackerService seasonCycleTrackerService)
+        IRandomNumberGenerator randomNumberGenerator, TemperateWeatherDurationService temperateWeatherDurationService,
+        SeasonCycleTrackerService seasonCycleTrackerService, DroughtWeather droughtWeather)
     {
         SeasonTypes = new Dictionary<int, SeasonType>();
         //TODO properly register seasons
@@ -60,8 +61,9 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         _eventBus = eventBus;
         _mapEditorMode = mapEditorMode;
         _randomNumberGenerator = randomNumberGenerator;
-        _weatherDurationService = weatherDurationService;
+        _temperateWeatherDurationService = temperateWeatherDurationService;
         _seasonCycleTrackerService = seasonCycleTrackerService;
+        _droughtWeather = droughtWeather;
     }
 
     public void Register(SeasonType seasonType)
@@ -84,8 +86,7 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         SeasonTypes.Remove(seasonType.Order);
     }
 
-    
-    
+
     public void NextSeason()
     {
         var index = _seasonIndex++;
@@ -96,7 +97,9 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         }
 
         var seasonType = SeasonTypes[index];
-        int duration = _weatherDurationService.GenerateDuration();
+        int duration = seasonType.IsDifficult
+            ? _droughtWeather.GetDurationAtCycle(_seasonCycleTrackerService.TotalCycles)
+            : _temperateWeatherDurationService.GenerateDuration();
         SeasonsPlugin.ConsoleWriter.LogInfo($"SeasonTypes: {SeasonTypes.Count}");
         SeasonsPlugin.ConsoleWriter.LogInfo($"Duration: {duration}");
         //TODO remove /4
@@ -140,6 +143,7 @@ public class SeasonService : ISaveableSingleton, ILoadableSingleton
         {
             _singletonLoader.GetSingleton(SeasonServiceKey).Get(CurrentSeasonKey, new SeasonObjectSerializer());
         }
+
         _eventBus.Register(this);
     }
 

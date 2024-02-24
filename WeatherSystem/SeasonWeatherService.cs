@@ -25,7 +25,7 @@ public class SeasonWeatherService : ILoadableSingleton
 
     private readonly EventBus _eventBus;
     private readonly DroughtWeather _droughtWeather;
-    private readonly RandomNumberGenerator _numberGenerator;
+    private readonly IRandomNumberGenerator _numberGenerator;
 
     private readonly WeatherService _weatherService;
     //private readonly TerrainMeshManager _meshManager;
@@ -39,7 +39,7 @@ public class SeasonWeatherService : ILoadableSingleton
         IDayNightCycle dayNightCycle,
         MapEditorMode mapEditorMode,
         DroughtWeather droughtWeather,
-        RandomNumberGenerator numberGenerator,
+        IRandomNumberGenerator numberGenerator,
         HazardousWeatherService hazardousWeatherService)
     {
         _seasonService = seasonService;
