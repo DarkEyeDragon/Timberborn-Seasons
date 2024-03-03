@@ -96,7 +96,7 @@ public class SeasonWeatherService : ILoadableSingleton
         }*/
     }
 
-    public void GenerateSeasonalWeatherEvent()
+    public void GenerateSeasonalWeather()
     {
         int maxDuration = Math.Max(_seasonService.CurrentSeason.RemainingDays.Count,
             _droughtWeather.GetDurationAtCycle(_seasonCycleTrackerService.TotalCycles));

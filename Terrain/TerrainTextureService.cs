@@ -1,4 +1,5 @@
-﻿using Seasons.Events;
+﻿using System.IO;
+using Seasons.Events;
 using Seasons.Seasons;
 using Seasons.SeasonSystem;
 using Seasons.SeasonSystem.Textures;
@@ -64,6 +65,21 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
 
     private void UpdateTerrainMesh(Season season)
     {
+        var obj = _resourceAssetLoader.Load<GameObject>($"{TexturePathTypes.Season}/Cube");
+        obj.transform.position = new Vector3(25, 32, 25);
+        obj = Object.Instantiate(obj);
+        SeasonsPlugin.ConsoleWriter.LogWarning($"Object name: {obj.name}");
+        var rend = obj.GetComponent<Renderer>();
+        var mats = rend.materials;
+        SeasonsPlugin.ConsoleWriter.LogWarning("Material names:");
+        foreach (var material in mats)
+        {
+            SeasonsPlugin.ConsoleWriter.LogWarning(material.name);
+            SeasonsPlugin.ConsoleWriter.LogWarning(material.shader.name);
+        }
+        /*SeasonsPlugin.ConsoleWriter.LogWarning("Shader:");
+        SeasonsPlugin.ConsoleWriter.LogWarning(shader.name);
+        _terrainMeshManager._terrainTilePrefab.GetComponent<Renderer>().material.shader = shader;*/
         foreach (var (key, value) in _terrainMeshManager._tiles)
         {
             var renderer = value.GetComponent<MeshRenderer>();
@@ -71,7 +87,8 @@ public class TerrainTextureService : IPostLoadableSingleton, ILoadableSingleton
             foreach (var material in materials)
             {
                 if (!material.name.StartsWith("Grass") && !material.name.StartsWith("CliffEdge")) continue;
-                
+                // material.shader = shader;
+                // SeasonsPlugin.ConsoleWriter.LogWarning(shader.name);
                 if (SeasonTexture == null)
                 {
                     SeasonTexture = material.GetTexture(BaseAlbedoTex);
